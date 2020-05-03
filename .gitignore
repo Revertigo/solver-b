@@ -1,3 +1,6 @@
+# Solution
+solution*
+
 # Prerequisites
 *.d
 
@@ -32,3 +35,6 @@
 *.app
 demo
 test
+.idea/
+CMakeLists.txt
+cmake-build-debug/
