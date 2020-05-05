@@ -76,8 +76,7 @@ namespace solver {
         return r - num;
     }
 
-    void RealVariable::handle_imag(complex<double> & result, double a, double b, double discriminant)
-    {
+    void RealVariable::handle_imag(complex<double> &result, double a, double b, double discriminant) {
         throw exception(invalid_argument("There is no solution"));
     }
 
@@ -139,8 +138,7 @@ namespace solver {
         return ComplexVariable(c1._a - c2._a, c1._b - c2._b, c1._c - c2._c, c1._im - c2._im);
     }
 
-    void ComplexVariable::handle_imag(complex<double> & result, double a, double b, double discriminant)
-    {
+    void ComplexVariable::handle_imag(complex<double> &result, double a, double b, double discriminant) {
         result.real(-b / (2 * a));
         result.imag(sqrt(-discriminant) / (2 * a));
     }

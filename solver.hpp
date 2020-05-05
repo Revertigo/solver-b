@@ -12,7 +12,7 @@ namespace solver {
 
     class ComplexVariable;
 
-    double solve(RealVariable);//Function has to clear the varables of the reference
+    double solve(RealVariable);//Function has to clear the variables of the reference
     complex<double> solve(ComplexVariable);
 
     class Variable {
@@ -23,11 +23,12 @@ namespace solver {
         double _c;//Free number
 
         Variable() : _a(0.0), _b(1.0), _c(0.0), _im(0.0) {}//Default C'tor
-        Variable(double a, double b, double c) : Variable(a, b , c, 0.0) {}
+        Variable(double a, double b, double c) : Variable(a, b, c, 0.0) {}
+
         Variable(double a, double b, double c, complex<double> im) : _a(a), _b(b), _c(c), _im(im) {}
 
         //Yes i make it pure virtual => abstract class
-        virtual void handle_imag(complex<double> & result, double a, double b, double discriminant) = 0;
+        virtual void handle_imag(complex<double> &result, double a, double b, double discriminant) = 0;
 
     public:
         virtual complex<double> solve_abc_formula(void);
@@ -40,8 +41,7 @@ namespace solver {
         // Equivalent to:
         //RealVariable(double a, double b, double c): Variable(a,b,c){};
     public:
-        //complex<double> solve_abc_formula(void) override;
-        void handle_imag(complex<double> & result, double a, double b, double discriminant) override;
+        void handle_imag(complex<double> &result, double a, double b, double discriminant) override;
 
         //We want make it friend in order to enable something like 7 * RealVariable
         friend RealVariable operator+(const RealVariable &, const RealVariable &);
@@ -70,8 +70,7 @@ namespace solver {
         using Variable::Variable;
 
     public:
-        //complex<double> solve_abc_formula(void) override;
-        void handle_imag(complex<double> & result, double a, double b, double discriminant) override;
+        void handle_imag(complex<double> &result, double a, double b, double discriminant) override;
 
         friend ComplexVariable operator+(const ComplexVariable &, const ComplexVariable &);
 
