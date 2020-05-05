@@ -3,6 +3,31 @@
 #include <exception>
 
 namespace solver {
+
+    //Variable class
+    complex<double> Variable::solve_abc_formula(void) {
+        double a(_a), b(_b), c(_c);
+        double discriminant = b * b - 4 * a * c;
+        complex<double> result(0.0, 0);
+
+        if (a == 0.0 && b == 0.0) {
+            throw invalid_argument("No real soultion exists");
+        }
+        if (a != 0)//It is possible to be a Linear equation
+        {
+            if (discriminant >= 0) {
+                result = (-b + sqrt(discriminant)) / (2 * a);//One solution is enough
+            } else {//discriminant is negative
+                handle_imag(result, a, b, discriminant);
+            }
+        } else {
+            result.real(-c / b); //The only solution we have
+            result.imag(_im.imag());
+        }
+
+        return result;
+    }
+
     //RealVariable class
     RealVariable operator+(const RealVariable &r1, const RealVariable &r2) {
         return RealVariable(r1._a + r2._a, r1._b + r2._b, r1._c + r2._c);
@@ -51,26 +76,9 @@ namespace solver {
         return r - num;
     }
 
-    complex<double> RealVariable::solve_abc_formula(void) {
-        double a(_a), b(_b), c(_c);
-        double discriminant = b * b - 4 * a * c;
-        complex<double> result = 0.0;
-
-        if (a == 0.0 && b == 0.0) {
-            throw invalid_argument("No real soultion exists");
-        }
-        if (a != 0)//It is possible to be a Linear equation
-        {
-            if (discriminant >= 0) {
-                result = (-b + sqrt(discriminant)) / (2 * a);
-            } else {
-                throw exception(invalid_argument("There is no solution"));
-            }
-        } else {
-            result = -c / b; //The only solution we have
-        }
-
-        return result;
+    void RealVariable::handle_imag(complex<double> & result, double a, double b, double discriminant)
+    {
+        throw exception(invalid_argument("There is no solution"));
     }
 
     double solve(RealVariable r) {
@@ -131,28 +139,10 @@ namespace solver {
         return ComplexVariable(c1._a - c2._a, c1._b - c2._b, c1._c - c2._c, c1._im - c2._im);
     }
 
-    complex<double> ComplexVariable::solve_abc_formula(void) {
-        double a(_a), b(_b), c(_c);
-        double discriminant = b * b - 4 * a * c;
-        complex<double> result(0.0, 0);
-
-        if (a == 0.0 && b == 0.0) {
-            throw invalid_argument("No real soultion exists");
-        }
-        if (a != 0)//It is possible to be a Linear equation
-        {
-            if (discriminant >= 0) {
-                result = (-b + sqrt(discriminant)) / (2 * a);//One solution is enough
-            } else {//we have imaginary part, discriminant is negative
-                result.real(-b / (2 * a));
-                result.imag(sqrt(-discriminant) / (2 * a));
-            }
-        } else {
-            result.real(-c / b); //The only solution we have
-            result.imag(_im.imag());
-        }
-
-        return result;
+    void ComplexVariable::handle_imag(complex<double> & result, double a, double b, double discriminant)
+    {
+        result.real(-b / (2 * a));
+        result.imag(sqrt(-discriminant) / (2 * a));
     }
 
     complex<double> solve(ComplexVariable c) {
