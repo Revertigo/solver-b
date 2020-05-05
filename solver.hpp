@@ -21,22 +21,17 @@ namespace solver{
 
         Variable(): _a(0.0), _b(1.0), _c(0.0){}//Default C'tor
         Variable(double a, double b, double c): _a(a), _b(b), _c(c){}
-        virtual ~Variable() = 0;//Yes i make it pure virtual => abstract class
-    public:
-        const double a() const {return _a;}
-        const double b() const {return _b;}
-        const double c() const {return _c;}
+        virtual complex<double> solve_abc_formula(void) = 0;//Yes i make it pure virtual => abstract class
     };
 
     class RealVariable: public Variable{
-        double solve_abc_formula(RealVariable & r);
-
-    public:
         // Inherit Base's constructors, default ctor is Inherited by default(if not other Ctor implemented)
         using Variable::Variable;
 
         // Equivalent to:
         //RealVariable(double a, double b, double c): Variable(a,b,c){};
+    public:
+        complex<double> solve_abc_formula(void) override;
 
         //We want make it friend in order to enable something like 7 * RealVariable
         friend RealVariable operator +(const RealVariable &, const RealVariable &);
@@ -52,10 +47,11 @@ namespace solver{
     };
 
     class ComplexVariable: public Variable {
-        double _im;
-        ComplexVariable(double a, double b, double c, double im): Variable(a,b,c), _im(im){}
+        complex<double> _im;
+        ComplexVariable(double a, double b, double c, complex<double> im): Variable(a,b,c), _im(im){}
 
     public:
+        complex<double> solve_abc_formula(void) override;
         ComplexVariable(): Variable(), _im(0.0){};
         friend ComplexVariable operator +(const ComplexVariable &, const ComplexVariable &);
         friend ComplexVariable operator +(const ComplexVariable &, const int);
