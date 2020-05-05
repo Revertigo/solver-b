@@ -64,13 +64,8 @@ namespace solver{
         if(a != 0)//It is possible to be a Linear equation
         {
             if (discriminant >= 0) {
-                x1 = (-b + sqrt(discriminant)) / (2 * a);
-                x2 = (-b - sqrt(discriminant)) / (2 * a);
-                //x1 = (-b + sqrt(discriminant)) / (2 * a);
-                result = x1;
+                result = (-b + sqrt(discriminant)) / (2 * a);
             } else {
-//                realPart = -b / (2 * a);
-//                imaginaryPart = sqrt(-discriminant) / (2 * a);
                 throw exception(invalid_argument("There is no solution"));
             }
         } else{
@@ -137,7 +132,28 @@ namespace solver{
 
     complex<double> ComplexVariable::solve_abc_formula(void)
     {
-        return complex<double>();
+        double a(_a), b(_b), c(_c);
+        double discriminant = b*b - 4*a*c;
+        complex<double> result(0.0, 0);
+
+        if(a == 0.0 && b == 0.0)
+        {
+            throw invalid_argument("No real soultion exists");
+        }
+        if(a != 0)//It is possible to be a Linear equation
+        {
+            if (discriminant >= 0) {
+                result = (-b + sqrt(discriminant)) / (2 * a);//One solution is enough
+            } else {//we have imaginary part, discriminant is negative
+                result.real(-b / (2 * a));
+                result.imag(sqrt(-discriminant) / (2 * a));
+            }
+        } else{
+            result.real(-c/b); //The only solution we have
+            result.imag(_im.imag());
+        }
+
+        return result;
     }
 
     complex<double> solve(ComplexVariable c) {
