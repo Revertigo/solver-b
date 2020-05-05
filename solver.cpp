@@ -1,18 +1,18 @@
 #include "solver.hpp"
-
 #include <iostream>
 #include <exception>
+
 namespace solver{
     //RealVariable class
     RealVariable operator +(const RealVariable & r1, const RealVariable & r2){
         return RealVariable(r1._a + r2._a, r1._b + r2._b, r1._c + r2._c);
     }
 
-    RealVariable operator +(const RealVariable & r, const int num){
+    RealVariable operator +(const RealVariable & r, const double num){
         return RealVariable(r._a, r._b, r._c + num);
     }
 
-    RealVariable operator +(const int num, const RealVariable & r){
+    RealVariable operator +(const double num, const RealVariable & r){
         return r + num; // :)
     }
 
@@ -20,22 +20,26 @@ namespace solver{
         return RealVariable(r1._a - r2._a, r1._b - r2._b, r1._c - r2._c);
     }
 
-    RealVariable operator -(const RealVariable & r, const int num){
+    RealVariable operator -(const RealVariable & r, const double num){
         return RealVariable(r._a, r._b, r._c - num);
     }
 
-    RealVariable operator *(const int num, const RealVariable & r){
-        return r._a > 0 ? RealVariable(num, r._b, r._c) : RealVariable(r._a, num, r._c);
+    RealVariable operator *(const double num, const RealVariable & r){
+        return r._a > 0 ? RealVariable(r._a * num, r._b, r._c) : RealVariable(r._a, num * r._b, r._c);
     }
 
-    RealVariable operator /(const RealVariable & r , const int num){
+    RealVariable operator /(const RealVariable & r , const double num){
         if(num == 0){
             throw invalid_argument("Can't divide by zero");
         }
-        return RealVariable(r._a, r._b / num, r._c);
+
+        return r._a > 0 ? RealVariable(r._a/num, r._b, r._c) : RealVariable(r._a, r._b / num, r._c);
     }
 
-    RealVariable operator ^(RealVariable const & r, const int num){
+    RealVariable operator ^(RealVariable const & r, const double num){
+        if(num == 0.0){
+            throw invalid_argument("can't power by zero");
+        }
         return RealVariable(1, 0, r._c); //Sign it as x^2(we don't want 1x also)
     }
 
@@ -43,15 +47,15 @@ namespace solver{
         return r1 - r2;
     }
 
-    RealVariable operator ==(const RealVariable & r, const int num){
+    RealVariable operator ==(const RealVariable & r, const double num){
         return r - num;
     }
 
     complex<double> RealVariable::solve_abc_formula(void)
     {
         double a(_a), b(_b), c(_c);
-        double x1, x2, realPart, imaginaryPart, discriminant = b*b - 4*a*c;
-        double result = 0.0;
+        double discriminant = b*b - 4*a*c;
+        complex<double> result = 0.0;
 
         if(a == 0.0 && b == 0.0)
         {
@@ -85,11 +89,11 @@ namespace solver{
         return ComplexVariable(c1._a + c2._a, c1._b + c2._b, c1._c + c2._c, c1._im + c2._im);
     }
 
-    ComplexVariable operator +(const ComplexVariable & c, const int num ){
+    ComplexVariable operator +(const ComplexVariable & c, const double num ){
         return ComplexVariable(c._a, c._b, c._c + num, c._im);
     }
 
-    ComplexVariable operator +(const int num, const ComplexVariable & c){
+    ComplexVariable operator +(const double num, const ComplexVariable & c){
         return c + num;
     }
 
@@ -101,26 +105,29 @@ namespace solver{
         return ComplexVariable(c1._a - c2._a, c1._b - c2._b, c1._c - c2._c, c1._im - c2._im);
     }
 
-    ComplexVariable operator -(const ComplexVariable & c, const int num){
+    ComplexVariable operator -(const ComplexVariable & c, const double num){
         return ComplexVariable(c._a, c._b, c._c - num, c._im);
     }
 
-    ComplexVariable operator*(const int num, ComplexVariable const & c) {
-        return c._a > 0 ? ComplexVariable(num, c._b, c._c, c._im) : ComplexVariable(c._a, num, c._c, c._im);
+    ComplexVariable operator*(const double num, ComplexVariable const & c) {
+        return c._a > 0 ? ComplexVariable(c._a * num, c._b, c._c, c._im) : ComplexVariable(c._a, c._b * num, c._c, c._im);
     }
-    ComplexVariable operator /(ComplexVariable const & c, const int num){
+    ComplexVariable operator /(ComplexVariable const & c, const double num){
         if(num == 0){
             throw invalid_argument("Can't divide by zero");
         }
 
-        return ComplexVariable(c._a, c._b / num, c._c, c._im);
+        return c._a > 0 ? ComplexVariable(c._a/num, c._b, c._c, c._im) : ComplexVariable(c._a, c._b / num, c._c, c._im);
     }
 
-    ComplexVariable operator^(ComplexVariable const & c, const int num) {
-        return ComplexVariable(1, c._b, c._c, c._im);
+    ComplexVariable operator^(ComplexVariable const & c, const double num) {
+        if(num == 0){
+            throw invalid_argument("can't power by zero");
+        }
+        return ComplexVariable(1, 0, c._c, c._im);
     }
 
-    ComplexVariable operator ==(const ComplexVariable & c, const int num){
+    ComplexVariable operator ==(const ComplexVariable & c, const double num){
         return ComplexVariable(c._a, c._b, c._c - num, c._im);
     }
 

@@ -35,15 +35,15 @@ namespace solver{
 
         //We want make it friend in order to enable something like 7 * RealVariable
         friend RealVariable operator +(const RealVariable &, const RealVariable &);
-        friend RealVariable operator +(const RealVariable &, const int);
-        friend RealVariable operator +(const int, const RealVariable &);
+        friend RealVariable operator +(const RealVariable &, const double);
+        friend RealVariable operator +(const double, const RealVariable &);
         friend RealVariable operator -(const RealVariable &, const RealVariable &);
-        friend RealVariable operator -(const RealVariable &, const int);
-        friend RealVariable operator *(const int, const RealVariable &);
-        friend RealVariable operator /(const RealVariable &, const int);
-        friend RealVariable operator ^(RealVariable const &, const int);
+        friend RealVariable operator -(const RealVariable &, const double);
+        friend RealVariable operator *(const double, const RealVariable &);
+        friend RealVariable operator /(const RealVariable &, const double);
+        friend RealVariable operator ^(RealVariable const &, const double);
         friend RealVariable operator ==(const RealVariable &, const RealVariable &);
-        friend RealVariable operator ==(const RealVariable &, const int);
+        friend RealVariable operator ==(const RealVariable &, const double);
     };
 
     class ComplexVariable: public Variable {
@@ -54,15 +54,15 @@ namespace solver{
         complex<double> solve_abc_formula(void) override;
         ComplexVariable(): Variable(), _im(0.0){};
         friend ComplexVariable operator +(const ComplexVariable &, const ComplexVariable &);
-        friend ComplexVariable operator +(const ComplexVariable &, const int);
-        friend ComplexVariable operator +(const int, const ComplexVariable &);
+        friend ComplexVariable operator +(const ComplexVariable &, const double);
+        friend ComplexVariable operator +(const double, const ComplexVariable &);
         friend ComplexVariable operator +(const ComplexVariable &, complex<double>);
         friend ComplexVariable operator -(const ComplexVariable &, const ComplexVariable &);
-        friend ComplexVariable operator -(const ComplexVariable &, const int);
-        friend ComplexVariable operator *(const int, ComplexVariable const &);
-        friend ComplexVariable operator /(ComplexVariable const &, const int);
-        friend ComplexVariable operator^(ComplexVariable const &, const int);
-        friend ComplexVariable operator ==(const ComplexVariable &, const int);
+        friend ComplexVariable operator -(const ComplexVariable &, const double);
+        friend ComplexVariable operator *(const double, ComplexVariable const &);
+        friend ComplexVariable operator /(ComplexVariable const &, const double);
+        friend ComplexVariable operator ^(ComplexVariable const &, const double);
+        friend ComplexVariable operator ==(const ComplexVariable &, const double);
         friend ComplexVariable operator ==(const ComplexVariable &, const ComplexVariable &);
     };
 }
